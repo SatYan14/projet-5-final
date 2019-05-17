@@ -1,0 +1,97 @@
+{% extends('base.html.twig') %}
+{% block body %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('home') }}">Accueil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('hot') }}">Populaire</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('fresh') }}">Nouveau</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Catégories</a>
+            <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);" x-placement="bottom-start">
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 27}) }}">Programmation</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 28}) }}">Symfony</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 29}) }}">JavaScript</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 30}) }}">PHP</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 31}) }}">HTML / CSS
+
+                </a>
+
+
+            </li>
+            <li class="nav-item ml-auto">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a class="nav-link" href="{{path('profil', {'id': user.id})}}">
+                        <i class="fas fa-user-circle"></i>
+                        {{app.user.username}}</a>
+                {% else %}
+                    <a class="nav-link" href="{{path('app_login')}}">
+
+                        Se connecter
+                    </a>
+                {% endif %}
+
+
+            </li>
+
+        </ul>
+
+
+        <div class="container">
+
+            {% for question in questions %}
+                <div class="jumbotron">
+                    <h1 class="display-3">{{ question.content | raw }}</h1>
+                    <p class="lead">Posée le
+                        {{ question.createdAt | date('d/m/Y') }}
+                        à
+                        {{ question.createdAt | date('H:i')}}
+                        dans la catégorie
+                        <a href="{{ path('category', {'id_category': question.category.id}) }}">{{ question.category.title }}</a>
+                        par
+                        <a href="{{path('profil', {'id': question.user.id})}}">{{ question.user.username }}</a>
+
+                    </p>
+                    <p>
+
+                        <hr class="my-4">
+
+                        <a href="{{ path('show', {'id': question.id }) }}">
+                            {{ question.comments | length }}
+                            réponses
+                        </a>
+                    </p>
+                    <p class="lead">
+                        <a class="btn btn-outline-info" href="{{ path('show', {'id': question.id }) }}">Lire la suite</a>
+                        <a href="{{ path('question_like', {'id': question.id})}}" class="btn btn-outline-success js-like">
+
+                            {% if app.user and question.isLikedByUser(app.user) %}
+
+                                <i class="fas fa-arrow-alt-circle-up"></i>
+
+                            {% else %}
+                                <i class="far fa-arrow-alt-circle-up"></i>
+
+                            {% endif %}
+                            <span class="js-likes">
+                                {{ question.questionLikes | length}}
+                            </span>
+
+
+                        </a>
+
+                    </p>
+                </div>
+            {% endfor %}
+
+        </div>
+
+    {% endblock %}

@@ -1,0 +1,136 @@
+{% extends('base.html.twig') %}
+
+{% block body %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('home') }}">Accueil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('hot') }}">Populaire</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('fresh') }}">Nouveau</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Catégories</a>
+            <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);" x-placement="bottom-start">
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 27}) }}">Programmation</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 28}) }}">Symfony</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 29}) }}">JavaScript</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 30}) }}">PHP</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 31}) }}">HTML / CSS
+
+                </a>
+
+
+            </li>
+            <li class="nav-item ml-auto">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a class="nav-link" href="{{path('profil', {'id': user.id})}}">
+                        <i class="fas fa-user-circle"></i>
+                        {{app.user.username}}</a>
+                {% else %}
+                    <a class="nav-link" href="{{path('app_login')}}">
+
+                        Se connecter
+                    </a>
+                {% endif %}
+
+
+            </li>
+
+        </ul>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h1 class="text-warning text-center">{{ question.content | raw }}</h1>
+                </div>
+                <div class="offset-6 col-6">
+                    <p>Question posée le
+                        {{ question.createdAt | date('d/m/Y') }}
+                        à
+                        {{ question.createdAt | date('H:i')}}
+                        par
+                        <strong>
+                            <a href="{{path('profil', {'id': question.user.id})}}">{{ question.user.username }}</a>
+
+                        </strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="write-answer-container">
+                <div class="col-12">
+                    {{ form_start(form) }}
+
+
+                    {{ form_row(form.content, {'attr': {'class': 'form-control'}, 'label': 'Votre réponse'}) }}
+
+                    <div class="col-12 submit-container">
+                        <a href="{{ path('show', {'id': question.id }) }}">
+                            <button class="btn btn-outline-info">Ajouter</button>
+                        </a>
+                    </div>
+
+                    {{ form_end(form) }}
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            {% for comment in comments %}
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12">
+                        <strong>
+                            {{ comment.user.username }}
+                        </strong>
+                        <p>
+                            {{ comment.date | date('d/m/Y') }}
+                            à
+                            {{ comment.date | date('H:i')}}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offset-lg-2 col-lg-10 col-sm-12">
+                        {{ comment.content | raw }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offset-lg-9 col-lg-3 offset-md-6 col-md-6 col-sm-12">
+
+                        <hr>
+
+                        <a href="{{ path('comment_like', {'id': comment.id})}}" class="btn btn-outline-success js-like">
+
+
+                            {% if app.user and comment.isLikedByUser(app.user) %}
+
+                                <i class="fas fa-arrow-alt-circle-up"></i>
+
+                            {% else %}
+                                <i class="far fa-arrow-alt-circle-up"></i>
+
+                            {% endif %}
+                            <span class="js-likes">{{ comment.commentLikes | length }}</span>
+
+                        </a>
+
+
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+
+
+    {% endblock %}

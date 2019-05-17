@@ -1,0 +1,114 @@
+{% extends('base.html.twig') %}
+
+{% block body %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('home') }}">Accueil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('hot') }}">Populaire</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('fresh') }}">Nouveau</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Catégories</a>
+            <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);" x-placement="bottom-start">
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 27}) }}">Programmation</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 28}) }}">Symfony</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 29}) }}">JavaScript</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 30}) }}">PHP</a>
+
+                <a class="dropdown-item" href="{{ path('category', {'id_category': 31}) }}">HTML / CSS
+
+                </a>
+
+
+            </li>
+            <li class="nav-item ml-auto">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a class="nav-link" href="{{path('profil', {'id': app.user.id})}}">
+                        <i class="fas fa-user-circle"></i>
+                        {{app.user.username}}</a>
+                {% else %}
+                    <a class="nav-link" href="{{path('app_login')}}">
+
+                        Se connecter
+                    </a>
+                {% endif %}
+
+
+            </li>
+
+        </ul>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="offset-3 col-9">
+                    <h1>{{ user.username }}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                    <h2>Mes questions</h2>
+                    {% for question in user.questions %}
+                        <div class="container-question">
+                            <h3>
+                                <a href="{{ path('show', {'id': question.id }) }}">{{ question.content }}</a>
+                            </h3>
+                            <p>Posée le
+                                {{ question.createdAt | date('d/m/Y') }}
+                                à
+                                {{ question.createdAt | date('H:i')}}
+                                dans la catégorie
+                                <strong>{{ question.category.title }}</strong>
+                            </p>
+                            <hr>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+
+                    <h2>Mes réponses</h2>
+                    {% for comment in user.comments %}
+                        <div class="container-answer">
+                            {% autoescape %}
+                                <h3>
+                                    <a href="{{ path('show', {'id': comment.question.id }) }}">{{ comment.content | striptags | length > 350 ? comment.content|slice(0, 50) ~ '...' : comment.content  }}</a>
+                                </h3>
+                            {% endautoescape %}
+                            <p>Répondu le
+                                {{ comment.date | date('d/m/Y') }}
+                                à
+                                {{ comment.date | date('H:i')}}
+                                dans la catégorie
+                                <strong>{{ comment.question.category.title }}</strong>
+                            </p>
+                            <hr>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+
+                    <h2>Mes upvotes</h2>
+                    {% for like in user.QuestionLikes %}
+                        <h3>
+                            <a href="{{ path('show', {'id': like.question.id }) }}">{{ like.question.content }}</a>
+                        </h3>
+                        <p>Upvote dans la catégorie
+                            <strong>{{ like.question.category.title }}</strong>
+                        </p>
+                        <hr>
+
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+        </div>
+    {% endblock %}

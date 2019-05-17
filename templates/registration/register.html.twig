@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+    <link href="https://bootswatch.com/4/slate/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('stylesheet/registerstyle.css') }}">
+{% endblock %}
+
+{% block title %}Creer un compte
+{% endblock %}
+
+{% block body %}
+    <div class='outer-scratch'>
+        <div class="inner-scratch">
+            <div class="background grain"></div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="form-container">
+
+            <div class="col text-center">
+                <h1 class="main-title" id="glitch-title">Une question ?</h1>
+            </div>
+
+
+            {{ form_start(registrationForm) }}
+
+            <div class="form-group col-lg-3 col-md-6 col-sm-9 m-auto">
+
+                {{ form_row(registrationForm.email, {'attr': {'class': 'form-control'}, 'label': 'Votre e-mail'}) }}
+            </div>
+
+            <div class="form-group col-lg-3 col-md-6 col-sm-9 m-auto ">
+
+                {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'form-control'}, 'label': 'Votre mot de passe'}) }}
+            </div>
+
+            <div class="form-group col-lg-3 col-md-6 col-sm-9 m-auto ">
+                {{ form_row(registrationForm.username, {'attr': {'class': 'form-control'}, 'label': 'Pseudonyme'}) }}
+            </div>
+
+
+            <a href="{{ path('app_register') }}">
+                <button class="btn btn-outline-info">S'enregister</button>
+            </a>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+
+
+    <div class="container register-connect">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 m-auto">
+                <h2>Deja un compte ? Connectez-vous.</h2>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 m-auto">
+                <a href="{{ path('app_login') }}">
+                    <button class="btn btn-outline-info">Connexion</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src=" {{ asset('javascript/stuttering.js')}}"></script>
+{% endblock %}
